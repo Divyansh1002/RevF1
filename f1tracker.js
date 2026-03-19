@@ -93,7 +93,7 @@ async function fetchData() {
 
   try {
     // Use a CORS proxy for the fetch
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(SHEET_CSV_URL)}`;
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(SHEET_CSV_URL)}`;
     setLoadingProgress(30, 'Downloading sheet data…');
 
     const resp = await fetch(proxyUrl);
