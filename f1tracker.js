@@ -93,10 +93,10 @@ async function fetchData() {
 
   try {
     // Use a CORS proxy for the fetch
-    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(SHEET_CSV_URL)}`;
+    const proxyUrl = `https://thingproxy.freeboard.io/fetch/${SHEET_CSV_URL}`;
     setLoadingProgress(30, 'Downloading sheet data…');
 
-    const resp = await fetch(proxyUrl);
+    const resp = await fetch(SHEET_CSV_URL, { mode: 'cors' });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 
     setLoadingProgress(60, 'Parsing data…');
