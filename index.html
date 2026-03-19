@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reverse F1 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="f1tracker.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <div class="noise"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo" onclick="showPage('standings'); window.scrollTo({top:0, behavior:'smooth'});" style="cursor:pointer;display:flex;align-items:center;gap:6px;">
+    REV<img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg" style="height:16px;width:auto;" alt="F1"/>
+    </div>
+    <div></div> <div></div>
+    <div class="nav-links">
+      <button class="nav-btn active" data-page="standings">Standings</button>
+      <button class="nav-btn" data-page="constructors">Constructors</button>
+      <button class="nav-btn" data-page="history">Race History</button>
+      <button class="nav-btn" data-page="charts">Charts</button>
+      <button class="nav-btn" data-page="compare">Compare</button>
+    </div>
+    <div class="nav-right">
+      <div class="sync-status" id="sync-status">
+        <span class="sync-dot" id="sync-dot"></span>
+        <span id="sync-label">Loading…</span>
+      </div>
+      <button class="refresh-btn" onclick="fetchData()" title="Refresh data">↻</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#9776;</button>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="nav-btn" data-page="standings">Standings</button>
+    <button class="nav-btn" data-page="constructors">Constructors</button>
+    <button class="nav-btn" data-page="history">Race History</button>
+    <button class="nav-btn" data-page="charts">Charts</button>
+    <button class="nav-btn" data-page="compare">Compare</button>
+  </div>
+
+  <main class="main">
+
+    <!-- LOADING -->
+    <div id="loading-screen" class="loading-screen">
+      <div class="loading-inner">
+        <div class="loading-logo">REV<span>F1</span></div>
+        <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
+        <div class="loading-label" id="loading-label">Connecting to Google Sheets…</div>
+      </div>
+    </div>
+
+    <!-- ERROR -->
+    <div id="error-screen" class="error-screen" style="display:none">
+      <div class="error-inner">
+        <div class="error-code">ERR</div>
+        <div class="error-msg" id="error-msg">Could not load data.</div>
+        <div class="error-hint">Make sure your Google Sheet is published and the URL in <code>app.js</code> is correct.</div>
+        <button class="submit-btn" style="margin-top:24px;max-width:200px" onclick="fetchData()">Retry</button>
+      </div>
+    </div>
+
+    <!-- STANDINGS -->
+    <section class="page" id="page-standings">
+      <div class="page-header">
+        <div>
+          <div class="page-label">2026 Season</div>
+          <h1 class="page-title">Driver Standings</h1>
+        </div>
+        <div class="header-stats" id="header-stats"></div>
+      </div>
+      <div class="standings-wrap">
+        <div class="podium-row" id="podium"></div>
+        <div class="standings-list" id="standings-list"></div>
+      </div>
+    </section>
+
+    <!-- CONSTRUCTORS -->
+    <section class="page" id="page-constructors">
+      <div class="page-header">
+        <div>
+          <div class="page-label">2026 Season</div>
+          <h1 class="page-title">Constructors</h1>
+        </div>
+      </div>
+      <div class="constructors-grid" id="constructors-grid"></div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="page" id="page-history">
+      <div class="page-header">
+        <div>
+          <div class="page-label">2026 Season</div>
+          <h1 class="page-title">Race History</h1>
+        </div>
+      </div>
+      <div class="history-grid" id="history-grid"></div>
+      <div class="no-data-msg" id="history-empty" style="display:none">No race data found in your sheet yet.</div>
+    </section>
+
+    <!-- CHARTS -->
+    <section class="page" id="page-charts">
+      <div class="page-header">
+        <div>
+          <div class="page-label">2025 Season</div>
+          <h1 class="page-title">Charts</h1>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card wide">
+          <div class="chart-card-title">Points progression by driver</div>
+          <div class="chart-wrap"><canvas id="chart-progression"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-title">Total points by driver</div>
+          <div class="chart-wrap"><canvas id="chart-bar"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-title">Points by constructor</div>
+          <div class="chart-wrap"><canvas id="chart-teams"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARE -->
+    <section class="page" id="page-compare">
+      <div class="page-header">
+        <div>
+          <div class="page-label">Head to Head</div>
+          <h1 class="page-title">Compare Drivers</h1>
+        </div>
+      </div>
+      <div class="compare-selectors">
+        <select id="compare-a" class="compare-select"></select>
+        <div class="vs-badge">VS</div>
+        <select id="compare-b" class="compare-select"></select>
+      </div>
+      <div id="compare-output"></div>
+    </section>
+
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="f1tracker.js"></script>
+</body>
+</html>
