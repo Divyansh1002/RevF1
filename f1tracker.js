@@ -1,5 +1,5 @@
 
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRnkA4y9q6MHr8gfIABpVYNxsWaDTmQgM-nhR1RqAK4SlopmACWIs2Q8Pz13j-UXp_CXjIzAr8lZC63/pub?gid=1124557769&single=true&output=csv';
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRnkA4y9q6MHr8gfIABpVYNxsWaDTmQgM-nhR1RqAK4SlopmACWIs2Q8Pz13j-UXp_CXjIzAr8lZC63/pub?gid=1958961179&single=true&output=csv';
 
 /* ── TEAM & DRIVER CONFIG ────────────────────────────────── */
 const TEAM_COLORS = {
